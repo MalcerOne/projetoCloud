@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-app
+spec:
+  selector:
+    matchLabels:
+      run: django-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: django-app
+    spec:
+      containers:
+      - name: django-app
+        image: malcerone/getit-django-app:latest
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-app
+  labels:
+    run: django-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8000
+    protocol: TCP
+  selector:
+    run: django-app

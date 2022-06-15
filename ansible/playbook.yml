@@ -1,0 +1,10 @@
+- hosts: localhost
+  tasks:
+    - name: Create django app
+      command: kubectl apply -f django.yml
+    
+    - name: Set Auto Scaling
+      command: kubectl autoscale deployment django-app --cpu-percent=50 --min=1 --max=5
+
+    - name: Install Metrics Server
+      command: kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
